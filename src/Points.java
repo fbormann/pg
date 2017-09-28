@@ -4,21 +4,18 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
-import java.util.Random;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
-import com.sun.javafx.geom.Ellipse2D;
-import com.sun.javafx.geom.Shape;
 
 public class Points extends JPanel implements MouseListener {
 	public static ArrayList<Point> points = new ArrayList();
@@ -42,6 +39,8 @@ public class Points extends JPanel implements MouseListener {
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
 				g2d.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);
+				
+				g2d.fill(new Ellipse2D.Double(points.get(i).x, points.get(i).y, 10, 10));
 				
 				//g2.drawLine(points.get(i).x, points.get(i).y,points.get(i).x, points.get(i).y);
 			}
