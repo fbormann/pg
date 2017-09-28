@@ -22,6 +22,8 @@ public class Points extends JPanel implements MouseListener{
 		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setColor(Color.red);
+		g2d.setStroke(new BasicStroke(2));
+		
 		
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
@@ -59,16 +61,22 @@ public class Points extends JPanel implements MouseListener{
 		Points points = new Points();
 		JFrame frame = new JFrame("Points");
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu();
-		JMenuItem menuItem = new JMenuItem();
-		menuItem.setText("Adicionar pontos");
+		JMenu menu = new JMenu("Configurar");
+		JMenuItem menuItem = new JMenuItem("Adicionar Pontos");
+		
+
+
 		menu.add(menuItem);
+		
 		menuBar.add(menu);
+		menuBar.setBackground(Color.GRAY);
+		menuBar.setPreferredSize(new Dimension(200, 30));	
+		
 		frame.setJMenuBar(menuBar);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(points);
 		frame.setSize(1000, 700);
-		frame.setLocationRelativeTo(null);
+		frame.setLocationRelativeTo(menu);
 		frame.setVisible(true);
 		frame.addMouseListener(points);
 		//frame.addMouseListener();

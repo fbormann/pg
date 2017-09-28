@@ -1,2 +1,2 @@
-# pg
-bezier curve
+Graphic Processing
+Bézier Curve
