@@ -1,29 +1,49 @@
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import com.sun.javafx.geom.Ellipse2D;
+import com.sun.javafx.geom.Shape;
 
 public class Points extends JPanel implements MouseListener {
 	public static ArrayList<Point> points = new ArrayList();
-
+	public static ArrayList<Point> dots = new ArrayList();
+	static Graphics2D g2d;
+	static Graphics2D g2;
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		Graphics2D g2d = (Graphics2D) g;
-
+		g2d = (Graphics2D) g;
+		//g2 = (Graphics2D) g2d;
+		
 		g2d.setColor(Color.red);
 		g2d.setStroke(new BasicStroke(2));
-
+		
+		//g2.setStroke(new BasicStroke(10));
+		//g2.setColor(Color.BLACK);
+		
+		Ellipse2D e;
+		
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
 				g2d.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);
+				
+				//g2.drawLine(points.get(i).x, points.get(i).y,points.get(i).x, points.get(i).y);
 			}
 		} else if (!points.isEmpty()) {
 			g2d.drawLine(points.get(0).x, points.get(0).y, points.get(0).x, points.get(0).y);
@@ -40,11 +60,14 @@ public class Points extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
+		
 		Point p1 = new Point();
 		p1.setLocation(x, y);
+		//SwingUtilities.convertPointFromScreen(p1, this);
 		
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			points.add(p1);			
+			points.add(p1);	
+			dots.add(p1);
 		}
 		
 
@@ -56,6 +79,7 @@ public class Points extends JPanel implements MouseListener {
 				points.remove(0);
 			}
 		}
+		
 		
 		repaint();
 		//System.out.println(points.size());
@@ -73,13 +97,16 @@ public class Points extends JPanel implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
+	
+	
+	
 	public static void main(String[] args) {
 		Points points = new Points();
 		JFrame frame = new JFrame("Points");
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Configurar");
 		JMenuItem menuItem = new JMenuItem("Adicionar Pontos");
-
+		
 		menu.add(menuItem);
 
 		menuBar.add(menu);
@@ -87,12 +114,15 @@ public class Points extends JPanel implements MouseListener {
 		menuBar.setPreferredSize(new Dimension(200, 30));
 
 		frame.setJMenuBar(menuBar);
+
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(points);
 		frame.setSize(1000, 700);
-		frame.setLocationRelativeTo(menu);
+		frame.setLocationRelativeTo(points);
+		
 		frame.setVisible(true);
 		frame.addMouseListener(points);
+
 		// frame.addMouseListener();
 		// listener(frame);
 	}
