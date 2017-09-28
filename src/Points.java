@@ -42,19 +42,23 @@ public class Points extends JPanel implements MouseListener {
 		int y = e.getY();
 		Point p1 = new Point();
 		p1.setLocation(x, y);
-		points.add(p1);
+		
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			points.add(p1);			
+		}
+		
 
-		if (e.getButton() == MouseEvent.BUTTON2) {
+		System.out.println(e.getButton()+" "+points.size()+" points");
+		if (e.getButton() == MouseEvent.BUTTON3) {
 			int aux = points.size();
 			if(aux>=0){
-				points.remove(points.size()-1);
-			}else {
-				points.add(p1);
+				//points.removeAll(points);
+				points.remove(0);
 			}
 		}
-
+		
 		repaint();
-		System.out.println(points.size());
+		//System.out.println(points.size());
 	}
 
 	public void mousePressed(MouseEvent e) {
