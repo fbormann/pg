@@ -1,4 +1,5 @@
 import java.awt.*;
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -6,14 +7,13 @@ import java.awt.event.MouseListener;
 import java.util.*;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 
 public class Points extends JPanel implements MouseListener{
 	public static ArrayList<Point> points = new ArrayList();
 	
-	public Points() {
-		this.addMouseListener(this);
-	}
+
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -58,12 +58,19 @@ public class Points extends JPanel implements MouseListener{
 	public static void main(String[] args) {
 		Points points = new Points();
 		JFrame frame = new JFrame("Points");
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu();
+		JMenuItem menuItem = new JMenuItem();
+		menuItem.setText("Adicionar pontos");
+		menu.add(menuItem);
+		menuBar.add(menu);
+		frame.setJMenuBar(menuBar);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(points);
 		frame.setSize(1000, 700);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		//frame.addMouseListener(points);
+		frame.addMouseListener(points);
 		//frame.addMouseListener();
 		// listener(frame);
 	}
