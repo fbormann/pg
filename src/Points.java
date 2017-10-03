@@ -4,10 +4,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -39,7 +39,6 @@ public class Points extends JPanel implements MouseListener {
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
 				g2d.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);
-				
 				g2d.fill(new Ellipse2D.Double(points.get(i).x, points.get(i).y, 10, 10));
 				
 				//g2.drawLine(points.get(i).x, points.get(i).y,points.get(i).x, points.get(i).y);
@@ -70,7 +69,7 @@ public class Points extends JPanel implements MouseListener {
 		}
 		
 
-		System.out.println(e.getButton()+" "+points.size()+" points");
+		//System.out.println(e.getButton()+" "+points.size()+" points");
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			int aux = points.size();
 			if(aux>=0){
@@ -78,12 +77,16 @@ public class Points extends JPanel implements MouseListener {
 				points.remove(0);
 			}
 		}
+		points.clear();
+		points.add(new Point(0, 0));
+		points.add(new Point(100, 100));
+		points.add(new Point(150, 50));
+		bezierPointInCurve(0.5, points);
 		
-		
-		repaint();
+		//repaint();
 		//System.out.println(points.size());
 	}
-
+	
 	public void mousePressed(MouseEvent e) {
 	}
 
@@ -96,7 +99,42 @@ public class Points extends JPanel implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
+	public Point bezierPointInCurve (double t, ArrayList<Point> p){
+		int n = p.size();
+		//Point currentPoint = new Point();
+		
+		ArrayList<Point> c = new ArrayList<Point>();
+		ArrayList<Point> aux = (ArrayList<Point>) p.clone();
+		
 	
+		
+		for(int i = 0;i<n-1;i++) {
+			for(int j=0;j<i+1;j++) {
+				//Linear interpolation
+				Point a = aux.get(j);
+				Point b = aux.get(j+1);
+				Point p1 = sumPoints(multiplyPointByConstant((1-t), a), multiplyPointByConstant(t, b));
+				c.add(p1);
+			}
+			aux = (ArrayList<Point>) c.clone();
+			c.clear();
+			n = aux.size();
+		}
+		
+		return null;
+	}
+	
+	public Point sumPoints(Point a, Point b) {
+		Point r = new Point(a.x+b.x, a.y+b.y);
+		return r;
+	}
+	
+	public Point multiplyPointByConstant(double constant, Point p) {
+		double a = p.getX()*constant;
+		double b =p.getY()*constant;
+		p.setLocation(a, b);
+		return p;
+	}
 	
 	
 	public static void main(String[] args) {
@@ -121,7 +159,8 @@ public class Points extends JPanel implements MouseListener {
 		
 		frame.setVisible(true);
 		frame.addMouseListener(points);
-
+		
+		
 		// frame.addMouseListener();
 		// listener(frame);
 	}
