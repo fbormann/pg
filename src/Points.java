@@ -34,10 +34,11 @@ public class Points extends JPanel implements MouseListener {
 		//g2.setStroke(new BasicStroke(10));
 		//g2.setColor(Color.BLACK);
 		
-		Ellipse2D e;
+//		Ellipse2D e;
 		
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
+				//System.out.println(points.get(i).x+" "+ points.get(i).y+" "+ points.get(i + 1).x +" "+ points.get(i + 1).y);
 				g2d.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);
 				//g2d.fill(new Ellipse2D.Double(points.get(i).x, points.get(i).y, 10, 10));
 				
@@ -72,10 +73,10 @@ public class Points extends JPanel implements MouseListener {
 		//System.out.println(e.getButton()+" "+points.size()+" points");
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			int aux = points.size();
-			if(aux>=0){
+			/*if(aux>=0){
 				//points.removeAll(points);
 				points.remove(0);
-			}
+			}*/
 		}
 		/**
 		points.clear();
@@ -84,9 +85,11 @@ public class Points extends JPanel implements MouseListener {
 		points.add(new Point(150, 50));
 		bezierPointInCurve(0.5, points);
 		*/
-		points = castejour(0.5, points);
+		if(points.size()==7) {
+			points = castejour(0.1, points);	
+			repaint();
+		}
 		
-		repaint();
 		//System.out.println(points.size());
 	}
 	
