@@ -39,7 +39,7 @@ public class Points extends JPanel implements MouseListener {
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
 				g2d.drawLine(points.get(i).x, points.get(i).y, points.get(i + 1).x, points.get(i + 1).y);
-				g2d.fill(new Ellipse2D.Double(points.get(i).x, points.get(i).y, 10, 10));
+				//g2d.fill(new Ellipse2D.Double(points.get(i).x, points.get(i).y, 10, 10));
 				
 				//g2.drawLine(points.get(i).x, points.get(i).y,points.get(i).x, points.get(i).y);
 			}
@@ -58,7 +58,7 @@ public class Points extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		
+		System.out.println(x+" "+y);
 		Point p1 = new Point();
 		p1.setLocation(x, y);
 		//SwingUtilities.convertPointFromScreen(p1, this);
@@ -77,13 +77,16 @@ public class Points extends JPanel implements MouseListener {
 				points.remove(0);
 			}
 		}
+		/**
 		points.clear();
 		points.add(new Point(0, 0));
 		points.add(new Point(100, 100));
 		points.add(new Point(150, 50));
 		bezierPointInCurve(0.5, points);
+		*/
+		points = castejour(0.5, points);
 		
-		//repaint();
+		repaint();
 		//System.out.println(points.size());
 	}
 	
@@ -99,6 +102,19 @@ public class Points extends JPanel implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
+	
+	public ArrayList<Point> castejour(double t, ArrayList<Point>controlPoints) {
+		double aux = t;
+		ArrayList<Point> p = new ArrayList<Point>();
+		p.add(controlPoints.get(0));
+		while(aux<=1) {
+			p.add(bezierPointInCurve(aux, controlPoints));
+			aux+=t;
+		}
+		p.add(controlPoints.get(controlPoints.size()-1));
+		return p;
+	}
+	
 	public Point bezierPointInCurve (double t, ArrayList<Point> p){
 		int n = p.size();
 		//Point currentPoint = new Point();
@@ -107,16 +123,20 @@ public class Points extends JPanel implements MouseListener {
 		ArrayList<Point> aux = (ArrayList<Point>) p.clone();
 		
 	
-		
 		for(int i = 0;i<n-1;i++) {
-			for(int j=0;j<i+1;j++) {
+			for(int j=0; (j<i+1) && (i+1<=aux.size()); j++) {
 				//Linear interpolation
 				Point a = aux.get(j);
 				Point b = aux.get(j+1);
-				Point p1 = sumPoints(multiplyPointByConstant((1-t), a), multiplyPointByConstant(t, b));
+				Point p1 = new Point(0,0);
+				if(a!=null && b!=null) {
+					p1 = sumPoints(multiplyPointByConstant((1-t), a), multiplyPointByConstant(t, b));	
+				}
 				c.add(p1);
 			}
 			aux = (ArrayList<Point>) c.clone();
+			System.out.println(aux.size());
+			if(aux.size()==1)return aux.get(0);
 			c.clear();
 			n = aux.size();
 		}
