@@ -53,7 +53,7 @@ public class Points extends JPanel implements MouseListener {
 		//Setting to 4 to print curve (not good at all)
 		if (points.size() == 4) {
 			//EVERYTHING HAPPENS HERE:
-			points = castejour(100, points);
+			points = castejour(1000, points);
 			repaint();
 		}
 
@@ -70,15 +70,14 @@ public class Points extends JPanel implements MouseListener {
 	
 	//Returns t points that from curve
 	public ArrayList<MyPoint> castejour(double t, ArrayList<MyPoint> controlPoints) {
-		//System.out.println("RECEBI " + t + " COMO ENTRADA");
 		double aux = (double) 1 / t;
 		double cont = aux;
 		ArrayList<MyPoint> p = new ArrayList<MyPoint>();
-		//add firs point from original control points
+		//add first point from original control points
 		p.add(controlPoints.get(0));
 		int k = 0;
-		while (cont <= (1 - aux)) {
-			p.add(bezierPointInCurve(aux, controlPoints));
+		while (cont <=1) {
+			p.add(bezierPointInCurve(cont, controlPoints));
 			cont += aux;
 			k++;
 			// System.out.println(k+"-ésima iteracao");
