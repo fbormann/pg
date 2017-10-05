@@ -85,7 +85,7 @@ public class Points extends JPanel implements MouseListener {
 		points.add(new Point(150, 50));
 		bezierPointInCurve(0.5, points);
 		*/
-		if(points.size()==7) {
+		if(points.size()==4) {
 			points = castejour(0.1, points);	
 			repaint();
 		}
