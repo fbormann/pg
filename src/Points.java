@@ -28,14 +28,13 @@ public class Points extends JPanel implements MouseListener {
 		g2d = (Graphics2D) g;
 
 		g2d.setColor(Color.red);
-		g2d.setStroke(new BasicStroke(2));
+		g2d.setStroke(new BasicStroke(1));
 
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
 				g2d.drawLine((int) points.get(i).getX(), (int) points.get(i).getY(), (int) points.get(i + 1).getX(),
 						(int) points.get(i + 1).getY());
-				// System.out.println((int)points.get(i).getX()+" "+ (int)points.get(i).getY()+"
-				// "+ (int)points.get(i + 1).getX()+" "+ (int)points.get(i + 1).getY());
+				 System.out.println((int)points.get(i).getX()+" "+ (int)points.get(i).getY()+" "+ (int)points.get(i + 1).getX()+" "+ (int)points.get(i + 1).getY());
 			}
 		}
 		points.clear();
@@ -53,7 +52,7 @@ public class Points extends JPanel implements MouseListener {
 		//Setting to 4 to print curve (not good at all)
 		if (points.size() == 4) {
 			//EVERYTHING HAPPENS HERE: 
-			points = castejour(20, points);
+			points = castejour(100, points);
 			repaint();
 		}
 
@@ -86,7 +85,8 @@ public class Points extends JPanel implements MouseListener {
 			k++;
 			// System.out.println(k+"-ésima iteracao");
 		}
-		p.add(controlPoints.get(controlPoints.size() - 1));
+		//p.add(controlPoints.get(controlPoints.size() - 1));
+		System.out.println(controlPoints.get(controlPoints.size()-1).getX()+" "+controlPoints.get(controlPoints.size()-1).getY()+" ULTIMO PONTO");
 		return p;
 	}
 
