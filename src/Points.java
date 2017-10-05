@@ -30,11 +30,12 @@ public class Points extends JPanel implements MouseListener {
 		g2d.setColor(Color.red);
 		g2d.setStroke(new BasicStroke(1));
 
+
 		if (points.size() > 1) {
 			for (int i = 0; i < points.size() - 1; i++) {
 				g2d.drawLine((int) points.get(i).getX(), (int) points.get(i).getY(), (int) points.get(i + 1).getX(),
 						(int) points.get(i + 1).getY());
-				 System.out.println((int)points.get(i).getX()+" "+ (int)points.get(i).getY()+" "+ (int)points.get(i + 1).getX()+" "+ (int)points.get(i + 1).getY());
+				 //System.out.println((int)points.get(i).getX()+" "+ (int)points.get(i).getY()+" "+ (int)points.get(i + 1).getX()+" "+ (int)points.get(i + 1).getY());
 			}
 		}
 		points.clear();
@@ -43,40 +44,37 @@ public class Points extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		// System.out.println("CLIQUEI EM "+x+" "+y);
 		MyPoint p1 = new MyPoint(x, y);
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			points.add(p1);
+			
 		}
 
 		//Setting to 4 to print curve (not good at all)
 		if (points.size() == 4) {
-			//EVERYTHING HAPPENS HERE: 
+			//EVERYTHING HAPPENS HERE:
 			points = castejour(100, points);
 			repaint();
 		}
 
 	}
 
-	public void mousePressed(MouseEvent e) {
-	}
+	public void mousePressed(MouseEvent e) {}
 
-	public void mouseReleased(MouseEvent e) {
-	}
+	public void mouseReleased(MouseEvent e) {}
 
-	public void mouseEntered(MouseEvent e) {
-	}
+	public void mouseEntered(MouseEvent e) {}
 
-	public void mouseExited(MouseEvent e) {
-	}
+	public void mouseExited(MouseEvent e) {}
 
 	
 	//Returns t points that from curve
 	public ArrayList<MyPoint> castejour(double t, ArrayList<MyPoint> controlPoints) {
-		System.out.println("RECEBI " + t + " COMO ENTRADA");
+		//System.out.println("RECEBI " + t + " COMO ENTRADA");
 		double aux = (double) 1 / t;
 		double cont = aux;
 		ArrayList<MyPoint> p = new ArrayList<MyPoint>();
+		//add firs point from original control points
 		p.add(controlPoints.get(0));
 		int k = 0;
 		while (cont <= (1 - aux)) {
@@ -85,8 +83,14 @@ public class Points extends JPanel implements MouseListener {
 			k++;
 			// System.out.println(k+"-ésima iteracao");
 		}
-		//p.add(controlPoints.get(controlPoints.size() - 1));
-		System.out.println(controlPoints.get(controlPoints.size()-1).getX()+" "+controlPoints.get(controlPoints.size()-1).getY()+" ULTIMO PONTO");
+		//add last point from original control points
+		p.add(controlPoints.get(controlPoints.size() - 1));
+		
+		for(int i = 0;i<controlPoints.size();i++) {
+			System.out.println(controlPoints.get(i).getX()+" "+controlPoints.get(i).getY());
+		}
+		//System.out.println(controlPoints.get(controlPoints.size()-1).getX()+" "+controlPoints.get(controlPoints.size()-1).getY()+" ULTIMO PONTO");
+		
 		return p;
 	}
 
@@ -121,17 +125,17 @@ public class Points extends JPanel implements MouseListener {
 	
 	public MyPoint sumPoints(MyPoint a, MyPoint b) {
 		MyPoint r = new MyPoint(a.x + b.x, a.y + b.y);
-		System.out.println("PONTO A: " + a.getX() + " " + a.getY());
-		System.out.println("PONTO B: " + b.getX() + " " + b.getY());
-		System.out.println("PONTO RESULTANTE: " + r.getX() + " " + r.getY());
+//		System.out.println("PONTO A: " + a.getX() + " " + a.getY());
+//		System.out.println("PONTO B: " + b.getX() + " " + b.getY());
+//		System.out.println("PONTO RESULTANTE: " + r.getX() + " " + r.getY());
 		return r;
 	}
 
 	public MyPoint multiplyPointByConstant(double constant, MyPoint p) {
 		double a = p.getX() * constant;
 		double b = p.getY() * constant;
-		p.setLocation(a, b);
-		return p;
+		MyPoint r = new MyPoint(a, b);
+		return r;
 	}
 
 	public static void main(String[] args) {
