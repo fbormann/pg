@@ -24,4 +24,20 @@ public class MyPoint {
 	}public void setY(double y) {
 		this.y = y;
 	}
+	
+	public static MyPoint sumPoints(MyPoint a, MyPoint b) {
+		MyPoint r = new MyPoint(a.x + b.x, a.y + b.y);
+		return r;
+	}
+
+	public static MyPoint multiplyPointByConstant(double constant, MyPoint p) {
+		double a = p.getX() * constant;
+		double b = p.getY() * constant;
+		MyPoint r = new MyPoint(a, b);
+		return r;
+	}
+	
+	public String toString() {
+		return ("X: "+(int)this.x+"Y: "+(int)this.y);
+	}
 }
