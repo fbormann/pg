@@ -31,18 +31,19 @@ public class Points extends JPanel implements MouseListener {
 		g2d = (Graphics2D) g;
 
 		g2d.setColor(Color.red);
-		g2d.setStroke(new BasicStroke(1));
+		g2d.setStroke(new BasicStroke(3));
 
 
 		if (pointsOfCurve.size() > 1) {
 			for (int i = 0; i < pointsOfCurve.size() - 1; i++) {
+				//System.out.println("i = "+i+" size = " +(pointsOfCurve.size()));
 				g2d.drawLine((int) pointsOfCurve.get(i).getX(), (int) pointsOfCurve.get(i).getY(), (int) pointsOfCurve.get(i + 1).getX(),
 						(int) pointsOfCurve.get(i + 1).getY());
 				 //System.out.println((int)controlPoints.get(i).getX()+" "+ (int)controlPoints.get(i).getY()+" "+ (int)controlPoints.get(i + 1).getX()+" "+ (int)controlPoints.get(i + 1).getY());
 			}
 		}
-		pointsOfCurve.clear();
-		controlPoints.clear();
+		//pointsOfCurve.clear();
+		//controlPoints.clear();
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -51,14 +52,15 @@ public class Points extends JPanel implements MouseListener {
 		MyPoint p1 = new MyPoint(x, y);
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			controlPoints.add(p1);
-			//printPoint();
-			
+			MyPoint.drawPoint(p1);
+			pointsOfCurve = castejour(100, controlPoints);
+			repaint();
 		}
 
 		//Setting to 4 to print curve (not good at all)
-		if (controlPoints.size() == 4) {
+		if (controlPoints.size() >0) {
 			//EVERYTHING HAPPENS HERE:
-			pointsOfCurve = castejour(1000, controlPoints);
+			pointsOfCurve = castejour(100, controlPoints);
 			repaint();
 		}
 
@@ -87,13 +89,14 @@ public class Points extends JPanel implements MouseListener {
 			counter += t;
 		}
 		
-		//add last point from original control controlPoints
-		returnSetOfPoints.add(controlPoints.get(controlPoints.size() - 1));
+//		I think it's wrong missing the last point of control
+//		returnSetOfPoints.add(controlPoints.get(controlPoints.size()-1));
+		
 		
 		return returnSetOfPoints;
 	}
 
-	//Returns a point in curve
+//		Returns a point in curve
 	public MyPoint bezierPointInCurve(double t, ArrayList<MyPoint> cPoints) {
 		int n = cPoints.size();
 		// Point currentPoint = new Point();
@@ -113,13 +116,15 @@ public class Points extends JPanel implements MouseListener {
 				}
 			}
 			controlPointsTemp = (ArrayList<MyPoint>) temp.clone();
-			if (controlPointsTemp.size() == 1)
-				return controlPointsTemp.get(0);
+//			if (controlPointsTemp.size() == 1)
+//				return controlPointsTemp.get(0);
 			temp.clear();
 			n = controlPointsTemp.size();
+			i =0;
 		}
-
-		return null;
+		System.out.println("TAMANHO "+controlPointsTemp.size());
+		//it has to return just one point
+		return controlPointsTemp.get(0);
 	}
 	
 	

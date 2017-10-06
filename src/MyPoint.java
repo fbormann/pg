@@ -40,4 +40,8 @@ public class MyPoint {
 	public String toString() {
 		return ("X: "+(int)this.x+"Y: "+(int)this.y);
 	}
+	
+	public static void drawPoint(MyPoint point) {
+		Points.g2d.drawOval((int)point.x, (int)point.y, 10000, 10000);
+	}
 }
