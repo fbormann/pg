@@ -24,17 +24,30 @@ public class Points extends JPanel implements MouseListener {
 	public static ArrayList<MyPoint> pointsOfCurve = new ArrayList<MyPoint>();
 	static Graphics2D g2d;
 	static Graphics2D g2;
-
+	static final double radius = 10;
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		g2d = (Graphics2D) g;
 
-		g2d.setColor(Color.red);
-		g2d.setStroke(new BasicStroke(3));
+		g2d.setColor(Color.black);
+		g2d.setStroke(new BasicStroke(1));
+		
+		for (int i = 0; i < controlPoints.size(); i++) {
+			MyPoint.drawPoint(controlPoints.get(i));
+		}
+		
+		for (int i = 0; i < controlPoints.size() - 1; i++) {
+			//System.out.println("i = "+i+" size = " +(pointsOfCurve.size()));
+			g2d.drawLine((int) controlPoints.get(i).getX(), (int) controlPoints.get(i).getY(), (int) controlPoints.get(i + 1).getX(),
+					(int) controlPoints.get(i + 1).getY());
+			 //System.out.println((int)controlPoints.get(i).getX()+" "+ (int)controlPoints.get(i).getY()+" "+ (int)controlPoints.get(i + 1).getX()+" "+ (int)controlPoints.get(i + 1).getY());
+		}
 
 
-		if (pointsOfCurve.size() > 1) {
+		if (pointsOfCurve.size() > 2) {
+			g2d.setColor(Color.RED);
 			for (int i = 0; i < pointsOfCurve.size() - 1; i++) {
 				//System.out.println("i = "+i+" size = " +(pointsOfCurve.size()));
 				g2d.drawLine((int) pointsOfCurve.get(i).getX(), (int) pointsOfCurve.get(i).getY(), (int) pointsOfCurve.get(i + 1).getX(),
@@ -42,7 +55,7 @@ public class Points extends JPanel implements MouseListener {
 				 //System.out.println((int)controlPoints.get(i).getX()+" "+ (int)controlPoints.get(i).getY()+" "+ (int)controlPoints.get(i + 1).getX()+" "+ (int)controlPoints.get(i + 1).getY());
 			}
 		}
-		//pointsOfCurve.clear();
+		pointsOfCurve.clear();
 		//controlPoints.clear();
 	}
 
@@ -52,14 +65,6 @@ public class Points extends JPanel implements MouseListener {
 		MyPoint p1 = new MyPoint(x, y);
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			controlPoints.add(p1);
-			MyPoint.drawPoint(p1);
-			pointsOfCurve = castejour(100, controlPoints);
-			repaint();
-		}
-
-		//Setting to 4 to print curve (not good at all)
-		if (controlPoints.size() >0) {
-			//EVERYTHING HAPPENS HERE:
 			pointsOfCurve = castejour(100, controlPoints);
 			repaint();
 		}
@@ -103,9 +108,9 @@ public class Points extends JPanel implements MouseListener {
 
 		ArrayList<MyPoint> temp = new ArrayList<MyPoint>();
 		ArrayList<MyPoint> controlPointsTemp = (ArrayList<MyPoint>) cPoints.clone();
-
+		int k = n;
 		for (int i = 0; i < n - 1; i++) {
-			for (int j = 0; (j < n - i - 1); j++) {
+			for (int j = 0; (j < k-1); j++) {
 				// Linear interpolation
 				MyPoint a = controlPointsTemp.get(j);
 				MyPoint b = controlPointsTemp.get(j + 1);
@@ -119,8 +124,7 @@ public class Points extends JPanel implements MouseListener {
 //			if (controlPointsTemp.size() == 1)
 //				return controlPointsTemp.get(0);
 			temp.clear();
-			n = controlPointsTemp.size();
-			i =0;
+			k = controlPointsTemp.size();
 		}
 		System.out.println("TAMANHO "+controlPointsTemp.size());
 		//it has to return just one point

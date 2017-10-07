@@ -1,7 +1,7 @@
 
 public class MyPoint {
 	double x, y;
-	
+	static final double radius = 10;
 	public MyPoint(double x, double y) {
 		this.x = x;
 		this.y = y;
@@ -42,6 +42,6 @@ public class MyPoint {
 	}
 	
 	public static void drawPoint(MyPoint point) {
-		Points.g2d.drawOval((int)point.x, (int)point.y, 10000, 10000);
+		Points.g2d.fillOval((int)(point.x - (radius/2.0)), (int)(point.y - (radius/2.0)), (int)radius, (int)radius);
 	}
 }
