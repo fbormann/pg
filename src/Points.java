@@ -14,7 +14,9 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.JTextComponent;
@@ -34,6 +36,9 @@ public class Points extends JPanel implements MouseListener {
 		g2d.setColor(Color.black);
 		g2d.setStroke(new BasicStroke(1));
 		
+//		Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+//        g2d.setStroke(dashed);
+		
 		for (int i = 0; i < controlPoints.size(); i++) {
 			MyPoint.drawPoint(controlPoints.get(i));
 		}
@@ -46,7 +51,7 @@ public class Points extends JPanel implements MouseListener {
 		}
 
 
-		if (pointsOfCurve.size() > 2) {
+		if (controlPoints.size() > 2) {
 			g2d.setColor(Color.RED);
 			for (int i = 0; i < pointsOfCurve.size() - 1; i++) {
 				//System.out.println("i = "+i+" size = " +(pointsOfCurve.size()));
@@ -65,7 +70,7 @@ public class Points extends JPanel implements MouseListener {
 		MyPoint p1 = new MyPoint(x, y);
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			controlPoints.add(p1);
-			pointsOfCurve = castejour(100, controlPoints);
+			pointsOfCurve = castejour(1000, controlPoints);
 			repaint();
 		}
 
@@ -92,10 +97,10 @@ public class Points extends JPanel implements MouseListener {
 		while (counter <=1) {
 			returnSetOfPoints.add(bezierPointInCurve(counter, controlPoints));
 			counter += t;
+			
+			//add the last control point
+			if((1-counter) < t)returnSetOfPoints.add(controlPoints.get(controlPoints.size()-1));
 		}
-		
-//		I think it's wrong missing the last point of control
-//		returnSetOfPoints.add(controlPoints.get(controlPoints.size()-1));
 		
 		
 		return returnSetOfPoints;
@@ -126,7 +131,7 @@ public class Points extends JPanel implements MouseListener {
 			temp.clear();
 			k = controlPointsTemp.size();
 		}
-		System.out.println("TAMANHO "+controlPointsTemp.size());
+		//System.out.println("TAMANHO "+controlPointsTemp.size());
 		//it has to return just one point
 		return controlPointsTemp.get(0);
 	}
@@ -136,21 +141,6 @@ public class Points extends JPanel implements MouseListener {
 	public static void main(String[] args) {
 		Points controlPoints = new Points();
 		JFrame frame = new JFrame("Points");
-		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("Configurar");
-		JMenuItem menuItem = new JMenuItem("Adicionar Pontos");
-		JTextField textField = new JTextField();
-		JPanel panelMenu = new JPanel();
-		textField.setBackground(Color.WHITE);
-		textField.setToolTipText("Digite a quantidade de pontos de controle:");
-		textField.setSize(100, 30);
-		panelMenu.setSize(100, 30);
-		panelMenu.add(textField);
-		menu.add(menuItem);
-
-		menuBar.add(menu);
-		menuBar.setBackground(Color.GRAY);
-		menuBar.setPreferredSize(new Dimension(200, 30));
 
 		// frame.setJMenuBar(menuBar);
 
@@ -161,7 +151,7 @@ public class Points extends JPanel implements MouseListener {
 
 		frame.setVisible(true);
 		frame.addMouseListener(controlPoints);
-		frame.add(panelMenu);
+
 
 		
 	}
