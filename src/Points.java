@@ -4,8 +4,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.JTextComponent;
 
-public class Points extends JPanel implements MouseListener {
+public class Points extends JPanel implements MouseListener, MouseMotionListener {
 	public static ArrayList<MyPoint> controlPoints = new ArrayList<MyPoint>();
 	public static ArrayList<MyPoint> pointsOfCurve = new ArrayList<MyPoint>();
 	static Graphics2D g2d;
@@ -34,10 +36,10 @@ public class Points extends JPanel implements MouseListener {
 		g2d = (Graphics2D) g;
 
 		g2d.setColor(Color.black);
-		g2d.setStroke(new BasicStroke(1));
+		//g2d.setStroke(new BasicStroke(1));
 		
-//		Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
-//        g2d.setStroke(dashed);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+        g2d.setStroke(dashed);
 		
 		for (int i = 0; i < controlPoints.size(); i++) {
 			MyPoint.drawPoint(controlPoints.get(i));
@@ -75,6 +77,37 @@ public class Points extends JPanel implements MouseListener {
 		}
 
 	}
+	
+	public void mouseDragged(MouseEvent e) {
+		MyPoint m = new MyPoint(e.getX(), e.getY());
+		int i = getNearestPoint(m);
+		controlPoints.get(i).setLocation(e.getX(), e.getY());
+		pointsOfCurve = castejour(1000, controlPoints);
+		repaint();
+	}
+	
+	public int getNearestPoint(MyPoint point) {
+		MyPoint mp = new MyPoint(0,0);
+		int indice = 0;
+		for(int i = 0;i<controlPoints.size();i++) {
+			MyPoint p = controlPoints.get(i);
+			double d1 = distanceBetwPoints(mp.getX(), mp.getY(), point.getX(), point.getY());
+			double d2 = distanceBetwPoints(p.getX(), p.getY(), point.getX(), point.getY());
+			if(d1 > d2) {
+				mp = p;
+				indice = i;
+			}
+		}
+		
+		return indice;
+	}
+	
+	public double distanceBetwPoints(double x1, double y1, double x2, double y2) {
+		double value = 0;
+		return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+	}
+
+	public void mouseMoved(MouseEvent e) {}
 
 	public void mousePressed(MouseEvent e) {}
 
@@ -151,8 +184,10 @@ public class Points extends JPanel implements MouseListener {
 
 		frame.setVisible(true);
 		frame.addMouseListener(controlPoints);
+		frame.addMouseMotionListener(controlPoints);
 
 
 		
 	}
+
 }
