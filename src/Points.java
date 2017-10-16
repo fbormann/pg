@@ -70,12 +70,19 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		int x = e.getX();
 		int y = e.getY();
 		MyPoint p1 = new MyPoint(x, y);
+		//Add a new point
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			controlPoints.add(p1);
 			pointsOfCurve = castejour(1000, controlPoints);
 			repaint();
 		}
-
+		//remove the nearest point of click
+		if (e.getButton() == MouseEvent.BUTTON3) {
+			int i = getNearestPoint(new MyPoint(e.getX(), e.getY()));
+			controlPoints.remove(i);
+			pointsOfCurve = castejour(1000, controlPoints);
+			repaint();
+		}
 	}
 	
 	public void mouseDragged(MouseEvent e) {
@@ -84,6 +91,14 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		controlPoints.get(i).setLocation(e.getX(), e.getY());
 		pointsOfCurve = castejour(1000, controlPoints);
 		repaint();
+		/*
+		 * it takes only the point which the click was in. Moving cursor fast, it breaks the point. It's caused by thread.
+		double d = MyPoint.distanceBetwPoints(m.getX(), m.getY(), controlPoints.get(i).getX(), controlPoints.get(i).getY());
+		if(d<=MyPoint.radius) {
+			controlPoints.get(i).setLocation(e.getX(), e.getY());
+			pointsOfCurve = castejour(1000, controlPoints);
+			repaint();
+		}*/
 	}
 	
 	public int getNearestPoint(MyPoint point) {
@@ -91,8 +106,8 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		int indice = 0;
 		for(int i = 0;i<controlPoints.size();i++) {
 			MyPoint p = controlPoints.get(i);
-			double d1 = distanceBetwPoints(mp.getX(), mp.getY(), point.getX(), point.getY());
-			double d2 = distanceBetwPoints(p.getX(), p.getY(), point.getX(), point.getY());
+			double d1 = MyPoint.distanceBetwPoints(mp.getX(), mp.getY(), point.getX(), point.getY());
+			double d2 = MyPoint.distanceBetwPoints(p.getX(), p.getY(), point.getX(), point.getY());
 			if(d1 > d2) {
 				mp = p;
 				indice = i;
@@ -102,11 +117,6 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		return indice;
 	}
 	
-	public double distanceBetwPoints(double x1, double y1, double x2, double y2) {
-		double value = 0;
-		return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
-	}
-
 	public void mouseMoved(MouseEvent e) {}
 
 	public void mousePressed(MouseEvent e) {}
@@ -159,8 +169,6 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 				}
 			}
 			controlPointsTemp = (ArrayList<MyPoint>) temp.clone();
-//			if (controlPointsTemp.size() == 1)
-//				return controlPointsTemp.get(0);
 			temp.clear();
 			k = controlPointsTemp.size();
 		}
@@ -175,7 +183,6 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		Points controlPoints = new Points();
 		JFrame frame = new JFrame("Points");
 
-		// frame.setJMenuBar(menuBar);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(controlPoints);

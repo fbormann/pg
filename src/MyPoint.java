@@ -44,4 +44,10 @@ public class MyPoint {
 	public static void drawPoint(MyPoint point) {
 		Points.g2d.fillOval((int)(point.x - (radius/2.0)), (int)(point.y - (radius/2.0)), (int)radius, (int)radius);
 	}
+
+	public static double distanceBetwPoints(double x1, double y1, double x2, double y2) {
+		double value = 0;
+		return Math.sqrt(Math.pow(x2-x1, 2) + Math.pow(y2-y1, 2));
+	}
+
 }
