@@ -1,2 +1,2 @@
 Graphic Processing
-Bézier Curve
+Degree Reduction of Bézier Curve
