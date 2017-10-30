@@ -33,7 +33,10 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 	static Graphics2D g2;
 	static final double radius = 8;
 	static final int CURVE_PRECISION = 1000;
-
+	static boolean drawPointsBool = true;
+	static boolean drawCurveBool = true;
+	static boolean drawPolygonBool = true;
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
@@ -45,16 +48,29 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
 
-		for (MyPoint mp : controlPoints)
-			MyPoint.drawPoint(mp);
+		if(drawPointsBool) drawPoints();
 
-		//Draw Polygon
+		if(drawPolygonBool) drawPolygon();
+		
+		if(drawCurveBool) drawCurve();
+
+		
+	}
+	
+	public void drawPoints() {
+		for (MyPoint mp : controlPoints)MyPoint.drawPoint(mp);
+	}
+	
+	public void drawPolygon() {
+		//Draw polygon
 		for (int i = 0; i < controlPoints.size() - 1; i++) {
 			MyPoint current = controlPoints.get(i);
 			MyPoint next = controlPoints.get(i + 1);
 			g2d.drawLine((int) current.x, (int) current.y, (int) next.x, (int) next.y);
 		}
-
+	}
+	
+	public void drawCurve() {
 		//Draw curve
 		if (controlPoints.size() > 1) {
 			g2d.setColor(Color.RED);
@@ -64,7 +80,6 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 				g2d.drawLine((int) current.x, (int) current.y, (int) next.x, (int) next.y);
 			}
 		}
-		pointsOfCurve.clear();
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -120,6 +135,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 
 	// Returns t controlPoints that form curve
 	public ArrayList<MyPoint> casteljau(double numberOfPoints, ArrayList<MyPoint> controlPoints) {
+		pointsOfCurve.clear();
 		double t = (double) 1 / numberOfPoints;
 		double counter = t;
 		ArrayList<MyPoint> returnSetOfPoints = new ArrayList<MyPoint>();
@@ -230,6 +246,9 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 			pointsOfCurve = casteljau(CURVE_PRECISION, controlPoints);
 			repaint();
 		}
+		if(e.getKeyChar() == 'c')drawCurveBool = !drawCurveBool; repaint();
+		if(e.getKeyChar() == 'p')drawPolygonBool = !drawPolygonBool; repaint();
+		if(e.getKeyChar() == 'd')drawPointsBool = !drawPointsBool; repaint();
 	}
 	public static void main(String[] args) {
 		Points controlPoints = new Points();
