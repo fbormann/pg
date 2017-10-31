@@ -1,10 +1,14 @@
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
+import java.awt.TextField;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -14,6 +18,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,10 +38,12 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 	static Graphics2D g2d;
 	static Graphics2D g2;
 	static final double radius = 8;
-	static final int CURVE_PRECISION = 1000;
+	static int CURVE_PRECISION = 1000;
 	static boolean drawPointsBool = true;
 	static boolean drawCurveBool = true;
 	static boolean drawPolygonBool = true;
+	static boolean textFocus = false;
+	
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -47,7 +55,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-
+		
 		if(drawPointsBool) drawPoints();
 
 		if(drawPolygonBool) drawPolygon();
@@ -62,7 +70,6 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 	}
 	
 	public void drawPolygon() {
-		//Draw polygon
 		for (int i = 0; i < controlPoints.size() - 1; i++) {
 			MyPoint current = controlPoints.get(i);
 			MyPoint next = controlPoints.get(i + 1);
@@ -71,7 +78,6 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 	}
 	
 	public void drawCurve() {
-		//Draw curve
 		if (controlPoints.size() > 1) {
 			g2d.setColor(Color.RED);
 			for (int i = 0; i < pointsOfCurve.size() - 1; i++) {
@@ -83,6 +89,8 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 	}
 
 	public void mouseClicked(MouseEvent e) {
+	
+		
 		int x = e.getX();
 		int y = e.getY();
 		MyPoint p1 = new MyPoint(x, y);
@@ -94,10 +102,16 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		}
 		// remove the nearest point of click
 		if (e.getButton() == MouseEvent.BUTTON3) {
-			int i = getNearestPointIndex(new MyPoint(e.getX(), e.getY()));
-			controlPoints.remove(i);
-			pointsOfCurve = casteljau(CURVE_PRECISION, controlPoints);
-			repaint();
+			if(controlPoints.size()>1) {
+				int i = getNearestPointIndex(new MyPoint(e.getX(), e.getY()));
+				double d = MyPoint.distanceBetwPoints(e.getX(), e.getY(), controlPoints.get(i).x, controlPoints.get(i).y);
+				if(d<=radius) {
+					controlPoints.remove(i);
+					pointsOfCurve = casteljau(CURVE_PRECISION, controlPoints);
+					repaint();	
+				}
+			}
+			else if(controlPoints.size()==1)controlPoints.remove(0);repaint();
 		}
 	}
 
@@ -249,20 +263,39 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		if(e.getKeyChar() == 'c')drawCurveBool = !drawCurveBool; repaint();
 		if(e.getKeyChar() == 'p')drawPolygonBool = !drawPolygonBool; repaint();
 		if(e.getKeyChar() == 'd')drawPointsBool = !drawPointsBool; repaint();
+		
+		if(e.getKeyChar() == 'e')textFocus = !textFocus;
 	}
+	
+	public static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    }
+	    // if exception isn't thrown, then it is an integer
+	    return true;
+	}
+	
 	public static void main(String[] args) {
 		Points controlPoints = new Points();
-		JFrame frame = new JFrame("Degree Reduction of Bézier Curve - Press 'r' to reduce degree");
-
+		JFrame frame = new JFrame("Degree Reduction of Bézier Curve - Press 'r' to reduce degree");		
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(controlPoints);
 		frame.setSize(1000, 700);
 		frame.setLocationRelativeTo(controlPoints);
 
+		JTextField textField = new JTextField(1000);
+//		frame.add(textField, BorderLayout.SOUTH);
+
+		
+		 
 		frame.setVisible(true);
 		frame.addMouseListener(controlPoints);
 		frame.addMouseMotionListener(controlPoints);
 		frame.addKeyListener(controlPoints);
+		
 
 	}
 
