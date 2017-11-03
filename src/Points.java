@@ -7,28 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.TextField;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
+import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.text.JTextComponent;
 import Jama.*;
 
@@ -38,7 +23,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 	static Graphics2D g2d;
 	static Graphics2D g2;
 	static final double radius = 8;
-	static int CURVE_PRECISION = 1000;
+	static int CURVE_PRECISION = 10000;
 	static boolean drawPointsBool = true;
 	static boolean drawCurveBool = true;
 	static boolean drawPolygonBool = true;
@@ -283,13 +268,29 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(controlPoints);
+
+		JPanel panel = new JPanel();
+		panel.setSize(200, 200);
+
+		JTextArea editTextArea = new JTextArea("Número de pontos");
+		editTextArea.setSize(100, 50);
+		JButton activateButton = new JButton("ativar pontos");
+		activateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CURVE_PRECISION = Integer.parseInt(editTextArea.getText());
+				frame.repaint();
+			}
+		});
+		activateButton.setSize(100,100);
+
+		panel.add(activateButton);
+		panel.add(editTextArea);
+
+		controlPoints.add(panel);
+
 		frame.setSize(1000, 700);
 		frame.setLocationRelativeTo(controlPoints);
-
-		JTextField textField = new JTextField(1000);
-//		frame.add(textField, BorderLayout.SOUTH);
-
-		
 		 
 		frame.setVisible(true);
 		frame.addMouseListener(controlPoints);
