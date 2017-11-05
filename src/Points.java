@@ -1,20 +1,12 @@
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Stroke;
-import java.awt.TextField;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.text.JTextComponent;
 import Jama.*;
 
 public class Points extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
@@ -269,25 +261,29 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(controlPoints);
 
-		JPanel panel = new JPanel();
-		panel.setSize(200, 200);
+		//JPanel panel = new JPanel();
+		//panel.setSize(200, 200);
 
 		JTextArea editTextArea = new JTextArea("Número de pontos");
 		editTextArea.setSize(100, 50);
+
 		JButton activateButton = new JButton("ativar pontos");
 		activateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CURVE_PRECISION = Integer.parseInt(editTextArea.getText());
 				frame.repaint();
+				controlPoints.grabFocus();
 			}
 		});
 		activateButton.setSize(100,100);
+		activateButton.setFocusPainted(false);
+		editTextArea.setFocusable(true);
+		controlPoints.add(activateButton);
+		controlPoints.add(editTextArea);
+		controlPoints.setFocusable(true);
 
-		panel.add(activateButton);
-		panel.add(editTextArea);
 
-		controlPoints.add(panel);
 
 		frame.setSize(1000, 700);
 		frame.setLocationRelativeTo(controlPoints);
@@ -296,7 +292,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		frame.addMouseListener(controlPoints);
 		frame.addMouseMotionListener(controlPoints);
 		frame.addKeyListener(controlPoints);
-		
+		frame.setFocusable(true);
 
 	}
 
