@@ -274,7 +274,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 				CURVE_PRECISION = Integer.parseInt(editTextArea.getText());
 				pointsOfCurve = controlPoints.casteljau(CURVE_PRECISION, Points.controlPoints);
 				frame.repaint();
-				controlPoints.grabFocus();
+				frame.requestFocus();
 			}
 		});
 		activateButton.setSize(100,100);
