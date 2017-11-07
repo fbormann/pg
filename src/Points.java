@@ -133,17 +133,15 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		ArrayList<MyPoint> returnSetOfPoints = new ArrayList<MyPoint>();
 
 		// add first point from original control controlPoints
-		returnSetOfPoints.add(controlPoints.get(0));
-
-		while (counter <= 1) {
+		if(numberOfPoints > 1)returnSetOfPoints.add(controlPoints.get(0));
+		int count = 0;
+		while (counter <= 1 && (count < numberOfPoints - 2)) {
 			returnSetOfPoints.add(bezierPointInCurve(counter, controlPoints));
 			counter += t;
-
-			// add the last control point
-			if ((1 - counter) < t)
-				returnSetOfPoints.add(controlPoints.get(controlPoints.size() - 1));
+			count++;
 		}
-
+		//add the last point of control
+		returnSetOfPoints.add(controlPoints.get(controlPoints.size() - 1));
 		return returnSetOfPoints;
 	}
 
