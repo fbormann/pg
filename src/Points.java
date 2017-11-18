@@ -105,7 +105,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		 * MyPoint.distanceBetwPoints(m.getX(), m.getY(), controlPoints.get(i).getX(),
 		 * controlPoints.get(i).getY()); if(d<=MyPoint.radius) {
 		 * controlPoints.get(i).setLocation(e.getX(), e.getY()); pointsOfCurve =
-		 * castejour(1000, controlPoints); repaint(); }
+		 * castejour(CURVE_PRECISION, controlPoints); repaint(); }
 		 */
 	}
 
@@ -135,7 +135,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		// add first point from original control controlPoints
 		if(numberOfPoints > 1)returnSetOfPoints.add(controlPoints.get(0));
 		int count = 0;
-		while (counter <= 1 && (count < numberOfPoints - 2)) {
+		while (counter <= 1 && (count < numberOfPoints - 1)) {
 			returnSetOfPoints.add(bezierPointInCurve(counter, controlPoints));
 			counter += t;
 			count++;
