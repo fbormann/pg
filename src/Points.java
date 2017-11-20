@@ -56,6 +56,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 	
 	public void drawCurve() {
 		if (controlPoints.size() > 1) {
+			g2d.setStroke(new BasicStroke(1));
 			g2d.setColor(Color.RED);
 			for (int i = 0; i < pointsOfCurve.size() - 1; i++) {
 				MyPoint current = pointsOfCurve.get(i);
@@ -104,7 +105,7 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		 * MyPoint.distanceBetwPoints(m.getX(), m.getY(), controlPoints.get(i).getX(),
 		 * controlPoints.get(i).getY()); if(d<=MyPoint.radius) {
 		 * controlPoints.get(i).setLocation(e.getX(), e.getY()); pointsOfCurve =
-		 * castejour(1000, controlPoints); repaint(); }
+		 * castejour(CURVE_PRECISION, controlPoints); repaint(); }
 		 */
 	}
 
@@ -132,17 +133,15 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		ArrayList<MyPoint> returnSetOfPoints = new ArrayList<MyPoint>();
 
 		// add first point from original control controlPoints
-		returnSetOfPoints.add(controlPoints.get(0));
-
-		while (counter <= 1) {
+		if(numberOfPoints > 1)returnSetOfPoints.add(controlPoints.get(0));
+		int count = 0;
+		while (counter <= 1 && (count < numberOfPoints - 1)) {
 			returnSetOfPoints.add(bezierPointInCurve(counter, controlPoints));
 			counter += t;
-
-			// add the last control point
-			if ((1 - counter) < t)
-				returnSetOfPoints.add(controlPoints.get(controlPoints.size() - 1));
+			count++;
 		}
-
+		//add the last point of control
+		returnSetOfPoints.add(controlPoints.get(controlPoints.size() - 1));
 		return returnSetOfPoints;
 	}
 
@@ -241,7 +240,6 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		if(e.getKeyChar() == 'p')drawPolygonBool = !drawPolygonBool; repaint();
 		if(e.getKeyChar() == 'd')drawPointsBool = !drawPointsBool; repaint();
 		
-		if(e.getKeyChar() == 'e')textFocus = !textFocus;
 	}
 	
 	public static boolean isInteger(String s) {
@@ -264,17 +262,18 @@ public class Points extends JPanel implements MouseListener, MouseMotionListener
 		//JPanel panel = new JPanel();
 		//panel.setSize(200, 200);
 
-		JTextArea editTextArea = new JTextArea("Número de pontos");
-		editTextArea.setSize(100, 50);
+		JTextArea editTextArea = new JTextArea(1,5);
+		editTextArea.setText("Pontos");
 
-		JButton activateButton = new JButton("ativar pontos");
+		JButton activateButton = new JButton("Atualizar");
 		activateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				CURVE_PRECISION = Integer.parseInt(editTextArea.getText());
 				pointsOfCurve = controlPoints.casteljau(CURVE_PRECISION, Points.controlPoints);
-				frame.repaint();
+				activateButton.setFocusable(false);
 				frame.requestFocus();
+				frame.repaint();
 			}
 		});
 		activateButton.setSize(100,100);
